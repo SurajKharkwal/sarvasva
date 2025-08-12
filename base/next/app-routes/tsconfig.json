@@ -3,12 +3,12 @@
     // Environment setup & latest features
     "baseUrl": ".", // root of your project
     "paths": {
-      "@/*" : "./src/*",
       "@/ui/*": ["./extra/ui/*"],
       "@/auth/*": ["./extra/auth/*"],
       "@/db/*": ["./extra/db/*"],
       "@/orm/*": ["./extra/orm/*"],
-      "@/eslint/*": ["./extra/eslint/*"]
+      "@/eslint/*": ["./extra/eslint/*"],
+      "@/*" : ["./src/*"]
     },
     "lib": ["ESNext"],
     "target": "ESNext",

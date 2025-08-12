@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { allowedOptions, validateInput } from "./src/utils";
-import { main } from "./src/runSetup.ts";
+import { allowedOptions, validateInput } from "@/utils";
+import { main } from "@/main";
 
 const program = new Command();
 
@@ -13,10 +13,16 @@ program
 program
   .command("init")
   .description("Initialize a new project with your choices")
+  .option("-n, --appName <appDir>", "provide a valid project name")
   .option(
     "-u, --ui <ui>",
     `Choose UI framework (${allowedOptions.ui.join(", ")})`,
     (val) => validateInput("ui", val),
+  )
+  .option(
+    "-t, --theme <theme>",
+    `Choose Shadcn Theme (${allowedOptions.shadcnTheme.join(", ")})`,
+    (val) => validateInput("shadcnTheme", val),
   )
   .option(
     "-a, --auth <auth>",
@@ -40,17 +46,9 @@ program
   )
   .option(
     "-p, --package-manager <pm>",
-    `Choose Package Manager (npm, yarn, pnpm, bun)`,
-    (val) => {
-      const allowedPM = ["npm", "yarn", "pnpm", "bun"];
-      if (!allowedPM.includes(val)) {
-        throw new Error(
-          `Invalid package manager: ${val}. Allowed: ${allowedPM.join(", ")}`,
-        );
-      }
-      return val;
-    },
-    "npm", // Default
+    `Choose Package Manager (${allowedOptions.pm.join(", ")})`,
+    (val) => validateInput("pm", val),
+    "npm",
   )
   .addHelpText(
     "after",
