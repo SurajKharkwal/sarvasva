@@ -54,8 +54,8 @@ program
     "after",
     `
 Examples:
-  $ sarvasva-next-app-routes init --ui shadcn --auth clerk --database postgres --orm prisma --eslint airbnb --package-manager yarn
-  $ sarvasva-next-app-routes init --database sqlite --orm drizzle --eslint standard
+  $ @sarvasva-app/next-app init -u shadcn -a clerk -d postgres -o prisma -e standard -p yarn
+  $ @sarvasva-app/next-app init -d sqlite -o drizzle -e standard
 `,
   )
   .action(async (options) => {

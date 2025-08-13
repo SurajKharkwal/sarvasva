@@ -8,6 +8,7 @@ const dependencies: string[] = [
   "clsx",
   "lucide-react",
   "tailwind-merge",
+  "",
 ];
 const devDependencies: string[] = ["tailwind-merge"];
 
