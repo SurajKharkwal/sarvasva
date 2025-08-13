@@ -27,7 +27,7 @@ export async function clerkSetup(appDir: string) {
     );
 
     // Write envs
-    await echo(path.join(appDir, ".env.local"), envs.join("\n"), true);
+    await echo(path.join(appDir, ".env.example"), envs.join("\n"), true);
 
     return { dependencies, devDependencies };
   } catch (err) {

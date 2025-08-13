@@ -8,9 +8,11 @@ import { mongodbSetup } from "@/db/mongodb/mongodb.setup";
 import { standardSetup } from "@/eslint/standard/standard.setup";
 import { prismaSetup } from "@/orm/prisma/prisma.setup";
 import { drizzleSetup } from "@/orm/drizzle/drizzle.setup";
-import { installPackages } from "./utils";
+import { echo, installPackages, runScripts } from "./utils";
 import { sparseClone } from "@flyinghawk/sparse-clone";
-import type { PM, SHADCN_THEME } from "@/types";
+import type { PM, SCRIPTS, SHADCN_THEME } from "@/types";
+import { layout } from "extra/common/layout";
+import path from "path";
 
 type OPTS = {
   appName: string;
@@ -25,17 +27,17 @@ type OPTS = {
 
 let dep: string[] = [];
 let devDep: string[] = [];
-let command: string[] = [];
+let scripts: SCRIPTS[] = [];
 
 const addDeps = (result?: {
   dependencies?: string[];
   devDependencies?: string[];
-  command?: string[];
+  scripts?: SCRIPTS[];
 }) => {
   if (!result) return;
   dep.push(...(result.dependencies ?? []));
   devDep.push(...(result.devDependencies ?? []));
-  command.push(...(result.command ?? []));
+  scripts.push(...(result.scripts ?? []));
 };
 
 const locate = {
@@ -85,12 +87,12 @@ export async function main(opts: OPTS) {
   }
 
   await installPackages(opts.packageManager, opts.appName, dep, devDep);
-
-  if (command.length) {
-    console.log(
-      `Next steps: run the following commands in your project folder:\n${command.join("\n")}`,
+  await runScripts(opts.packageManager, opts.appName, scripts);
+  if (opts.ui == "hero" || opts.auth == "clerk")
+    await echo(
+      path.join(opts.appName, "src/app/layout.tsx"),
+      layout(opts.auth === "clerk", opts.ui === "hero"),
     );
-  }
 
   console.log("Project setup complete!");
 }

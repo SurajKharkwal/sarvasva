@@ -15,7 +15,7 @@ export default pool;
 `;
 
 export const route = `
-// src/api/example/route.ts
+// src/app/api/example/route.ts
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 

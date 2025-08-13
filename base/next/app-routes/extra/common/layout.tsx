@@ -9,11 +9,13 @@ export const layout = (addClerk: boolean, addHeroUi: boolean) => {
   const CLERK_PROVIDER_END = addClerk ? `</ClerkProvider>` : ``;
 
   const HEROUI_IMPORT = addHeroUi
-    ? `import { HeroUIProvider } from "@heroui/react";`
+    ? `import { Providers } from "@/componets/provider";`
     : ``;
 
-  const HEROUI_START = addHeroUi ? `<HeroUIProvider>` : ``;
-  const HEROUI_END = addHeroUi ? `</HeroUIProvider>` : ``;
+  const HEROUI_START = addHeroUi
+    ? `<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>`
+    : ``;
+  const HEROUI_END = addHeroUi ? `</Providers>` : ``;
 
   return `
 import type { Metadata } from "next";
@@ -44,7 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     ${CLERK_PROVIDER_START}
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={\`\${geistSans.variable} \${geistMono.variable} antialiased\`}
         >

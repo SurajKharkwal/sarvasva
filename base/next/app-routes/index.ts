@@ -21,7 +21,7 @@ program
   )
   .option(
     "-t, --theme <theme>",
-    `Choose Shadcn Theme (${allowedOptions.shadcnTheme.join(", ")})`,
+    `Only if u chosed shadcn as ui. Choose Shadcn Theme (${allowedOptions.shadcnTheme.join(", ")})`,
     (val) => validateInput("shadcnTheme", val),
   )
   .option(

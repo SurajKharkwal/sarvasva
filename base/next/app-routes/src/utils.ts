@@ -1,8 +1,9 @@
+import { $ } from "zx";
 import { writeFile, appendFile } from "fs/promises";
-import type { PM } from "./types";
-import { execa } from "execa";
+import type { PM, SCRIPTS } from "./types";
 import path from "path";
 import { mkdir } from "fs/promises";
+
 type OPTS = {
   ui: string[];
   auth: string[];
@@ -40,46 +41,85 @@ export async function echo(filePath: string, message: string, append = false) {
   else await writeFile(filePath, message, "utf8");
 }
 
-const installCommands = {
-  npm: {
-    deps: ["install"],
-    devDeps: ["install", "--save-dev"],
-  },
-  yarn: {
-    deps: ["add"],
-    devDeps: ["add", "--dev"],
-  },
-  pnpm: {
-    deps: ["add"],
-    devDeps: ["add", "-D"],
-  },
-  bun: {
-    deps: ["add"],
-    devDeps: ["add", "-d"],
-  },
-};
-
 export async function installPackages(
   pm: PM,
-  dir: string,
-  deps: string[] = [],
-  devDeps: string[] = [],
+  appDir: string,
+  dependencies: string[] = [],
+  devDependencies: string[] = [],
 ) {
-  const commands = installCommands[pm];
+  switch (pm) {
+    case "bun":
+      if (dependencies)
+        await $({ quiet: true, cwd: appDir })`bun add ${dependencies}`;
+      if (devDependencies)
+        await $({ quiet: true, cwd: appDir })`bun add -D ${devDependencies}`;
+      break;
 
-  if (deps.length > 0) {
-    console.log(`📦 Installing dependencies with ${pm}...`);
-    await execa(pm, [...commands.deps, ...deps], {
-      cwd: dir,
-      stdio: "inherit",
-    });
+    case "npm":
+      if (dependencies)
+        await $({ quiet: true, cwd: appDir })`npm install ${dependencies}`;
+      if (devDependencies)
+        await $({
+          quiet: true,
+          cwd: appDir,
+        })`npm install -D ${devDependencies}`;
+      break;
+
+    case "yarn":
+      if (dependencies)
+        await $({ quiet: true, cwd: appDir })`yarn add ${dependencies}`;
+      if (devDependencies)
+        await $({ quiet: true, cwd: appDir })`yarn add -D ${devDependencies}`;
+      break;
+
+    case "pnpm":
+      if (dependencies)
+        await $({ quiet: true, cwd: appDir })`pnpm add ${dependencies}`;
+      if (devDependencies)
+        await $({ quiet: true, cwd: appDir })`pnpm add -D ${devDependencies}`;
+      break;
+
+    default:
+      throw new Error(`Unknown package manager: ${pm}`);
   }
+}
 
-  if (devDeps.length > 0) {
-    console.log(`🛠 Installing devDependencies with ${pm}...`);
-    await execa(pm, [...commands.devDeps, ...devDeps], {
-      cwd: dir,
-      stdio: "inherit",
-    });
+export async function runner(pm: PM, appDir: string, script: SCRIPTS) {
+  console.log(script);
+
+  switch (pm) {
+    case "bun":
+      await $({
+        quiet: true,
+        cwd: appDir,
+      })`bunx --bun ${script.cmd} ${script.args}`;
+      break;
+
+    case "npm":
+      await $({ quiet: true, cwd: appDir })`npx ${script.cmd} ${script.args}`;
+      break;
+
+    case "yarn":
+      await $({
+        quiet: true,
+        cwd: appDir,
+      })`yarn dlx ${script.cmd} ${script.args}`;
+      break;
+
+    case "pnpm":
+      await $({
+        quiet: true,
+        cwd: appDir,
+      })`pnpm dlx ${script.cmd} ${script.args}`;
+      break;
+
+    default:
+      throw new Error(`Unknown package manager: ${pm}`);
+  }
+}
+
+export async function runScripts(pm: PM, appDir: string, scripts: SCRIPTS[]) {
+  for (const script of scripts) {
+    await runner(pm, appDir, script);
   }
 }
