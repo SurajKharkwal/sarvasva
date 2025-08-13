@@ -11,8 +11,8 @@ import { drizzleSetup } from "@/orm/drizzle/drizzle.setup";
 import { echo, installPackages, runScripts } from "./utils";
 import { sparseClone } from "@flyinghawk/sparse-clone";
 import type { PM, SCRIPTS, SHADCN_THEME } from "@/types";
-import { layout } from "extra/common/layout";
 import path from "path";
+import { appLayout } from "extra/common/_app";
 
 type OPTS = {
   appName: string;
@@ -58,7 +58,7 @@ export async function main(opts: OPTS) {
 
   await sparseClone(
     "https://github.com/SurajKharkwal/sarvasva/",
-    "base/next/app-routes/skeleton",
+    "base/next/pages_routes/skeleton",
     opts.appName,
     { overrideDir: true },
   );
@@ -90,8 +90,8 @@ export async function main(opts: OPTS) {
   await runScripts(opts.packageManager, opts.appName, scripts);
   if (opts.ui == "hero" || opts.auth == "clerk")
     await echo(
-      path.join(opts.appName, "src/app/layout.tsx"),
-      layout(opts.auth === "clerk", opts.ui === "hero"),
+      path.join(opts.appName, "src/pages/_app.tsx"),
+      appLayout(opts.auth === "clerk", opts.ui === "hero"),
     );
 
   console.log("Project setup complete!");

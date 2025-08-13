@@ -13,7 +13,7 @@ const devDependencies: string[] = ["tailwind-merge"];
 
 export async function shadcnSetup(appDir: string, theme: SHADCN_THEME) {
   try {
-    await echo(path.join(appDir, "compoenents.json"), globalCss(theme));
+    await echo(path.join(appDir, "components.json"), globalCss(theme));
     return { dependencies, devDependencies };
   } catch (err) {
     console.error(err);
