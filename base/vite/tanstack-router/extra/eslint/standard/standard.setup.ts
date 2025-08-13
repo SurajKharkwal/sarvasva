@@ -4,9 +4,12 @@ import { standard } from "./data";
 
 const dependencies: string[] = [];
 const devDependencies: string[] = [
+  "globals",
   "eslint",
-  "eslint-config-next",
-  "@eslint/eslintrc",
+  "@eslint/js",
+  "eslint-plugin-react-hooks",
+  "eslint-plugin-react-refresh",
+  "typescript-eslint",
 ];
 
 export async function standardSetup(appDir: string) {

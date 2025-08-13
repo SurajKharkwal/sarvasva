@@ -1,6 +1,6 @@
 import path from "path";
 import { echo } from "@/utils";
-import { gloablcss, hero, provider } from "./data";
+import { gloablcss, hero, main, provider } from "./data";
 
 const dependencies: string[] = [
   "@heroui/theme",
@@ -12,9 +12,10 @@ const devDependencies: string[] = [];
 
 export async function heroSetup(appDir: string) {
   try {
-    await echo(path.join(appDir, "src/app/globals.css"), gloablcss);
-    await echo(path.join(appDir, "src/app/hero.ts"), hero);
-    await echo(path.join(appDir, "src/componets/provider.tsx"), provider);
+    await echo(path.join(appDir, "src/styles/globals.css"), gloablcss);
+    await echo(path.join(appDir, "src/styles/hero.ts"), hero);
+    await echo(path.join(appDir, "src/components/provider.tsx"), provider);
+    await echo(path.join(appDir, "src/main.tsx"), main);
     return { dependencies, devDependencies };
   } catch (err) {
     console.error(err);

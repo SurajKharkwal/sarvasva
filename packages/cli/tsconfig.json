@@ -1,15 +1,6 @@
 {
   "compilerOptions": {
     // Environment setup & latest features
-    "baseUrl": ".", // root of your project
-    "paths": {
-      "@/ui/*": ["./extra/ui/*"],
-      "@/auth/*": ["./extra/auth/*"],
-      "@/db/*": ["./extra/db/*"],
-      "@/orm/*": ["./extra/orm/*"],
-      "@/eslint/*": ["./extra/eslint/*"],
-      "@/*" : ["./src/*"]
-    },
     "lib": ["ESNext"],
     "target": "ESNext",
     "module": "Preserve",

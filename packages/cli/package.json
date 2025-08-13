@@ -1,0 +1,13 @@
+{
+  "name": "@sarvasva-app",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/prompts": "^2.4.9",
+    "prompts": "^2.4.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

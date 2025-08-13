@@ -13,35 +13,47 @@ export const gloablcss = `
 `;
 
 export const provider = `
-"use client";
-
-import type { ThemeProviderProps } from "next-themes";
-
-import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
-import { useRouter } from "next/navigation";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-export interface ProvidersProps {
-  children: React.ReactNode;
-  themeProps?: ThemeProviderProps;
+export function Provider({ children }: { children: React.ReactNode }) {
+
+  return (
+    <HeroUIProvider>
+      {children}
+    </HeroUIProvider>
+  );
 }
+`;
 
-declare module "@react-types/shared" {
-  interface RouterConfig {
-    routerOptions: NonNullable<
-      Parameters<ReturnType<typeof useRouter>["push"]>[1]
-    >;
+export const main = `
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import "@/styles/globals.css";
+
+// Import the generated route tree
+import { routeTree } from "./routeTree.gen";
+
+// Create a new router instance
+const router = createRouter({ routeTree });
+
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
   }
 }
 
-export function Providers({ children, themeProps }: ProvidersProps) {
-  const router = useRouter();
-
-  return (
-    <HeroUIProvider navigate={router.push}>
-      <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-    </HeroUIProvider>
+// Render the app
+const rootElement = document.getElementById("root")!;
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <Provider>
+        <RouterProvider router={router} />
+      </Provider>
+    </StrictMode>,
   );
 }
 `;

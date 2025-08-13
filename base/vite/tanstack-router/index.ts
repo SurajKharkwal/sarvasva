@@ -25,21 +25,6 @@ program
     (val) => validateInput("shadcnTheme", val),
   )
   .option(
-    "-a, --auth <auth>",
-    `Choose Auth provider (${allowedOptions.auth.join(", ")})`,
-    (val) => validateInput("auth", val),
-  )
-  .option(
-    "-d, --database <db>",
-    `Choose Database (${allowedOptions.database.join(", ")})`,
-    (val) => validateInput("database", val),
-  )
-  .option(
-    "-o, --orm <orm>",
-    `Choose ORM (${allowedOptions.orm.join(", ")})`,
-    (val) => validateInput("orm", val),
-  )
-  .option(
     "-e, --eslint <eslint>",
     `Choose ESLint config (${allowedOptions.eslint.join(", ")})`,
     (val) => validateInput("eslint", val),

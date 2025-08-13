@@ -1,5 +1,5 @@
 {
-  "name": "@sarvasva-cli/next-pages",
+  "name": "@sarvasva-app/next-pages",
   "main": "./dist/index.js",
   "type": "module",
   "version": "0.0.0",

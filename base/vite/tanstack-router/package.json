@@ -1,29 +1,35 @@
 {
-  "name": "tanstack-router",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@sarvasva-app/vite-tanstack",
+  "main": "./dist/index.js",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+  "version": "0.0.0",
+  "description": "A helper for sarvasva cli",
+  "keywords": [
+    "sparse-clone"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SurajKharkwal/sarvasva.git"
   },
-  "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+  "author": "Suraj Kharkwal",
+  "license": "MIT",
+  "scripts": {
+    "dev": "bun index.ts init",
+    "start": "bun ./dist/index.js",
+    "clean": "rm -rf ./dist/",
+    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node ",
+    "prerelease": "bun run clean && bun run build",
+    "release": "bun publish --access public"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react-swc": "^4.0.0",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2"
+    "@flyinghawk/sparse-clone": "^0.0.6",
+    "@types/bun": "latest",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "commander": "^14.0.0",
+    "validate-npm-package-name": "^6.0.2",
+    "zx": "^8.8.0"
   }
 }
