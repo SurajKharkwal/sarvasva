@@ -47,12 +47,74 @@
         "typescript": "5.8.2",
       },
     },
+    "base/next/app-routes": {
+      "name": "@sarvasva-app/next-app",
+      "version": "0.0.2",
+      "bin": {
+        "@sarvasva-app/next-app": "./dist/index.js",
+      },
+      "devDependencies": {
+        "@repo/core": "*",
+        "@types/bun": "latest",
+        "typescript": "^5.0.0",
+      },
+    },
+    "base/next/pages_routes": {
+      "name": "@sarvasva-app/next-pages",
+      "version": "0.0.1",
+      "bin": {
+        "@sarvasva-app/next-pages": "./dist/index.js",
+      },
+      "devDependencies": {
+        "@repo/core": "*",
+        "@types/bun": "latest",
+        "typescript": "^5.0.0",
+      },
+    },
+    "base/vite/react-router": {
+      "name": "@sarvasva-app/vite-react",
+      "version": "0.0.1",
+      "bin": {
+        "@sarvasva-app/vite-react": "./dist/index.js",
+      },
+      "devDependencies": {
+        "@repo/core": "*",
+        "@types/bun": "latest",
+        "typescript": "^5.0.0",
+      },
+    },
+    "base/vite/tanstack-router": {
+      "name": "@sarvasva-app/vite-tanstack",
+      "version": "0.0.1",
+      "bin": {
+        "@sarvasva-app/vite-tanstack": "./dist/index.js",
+      },
+      "devDependencies": {
+        "@repo/core": "*",
+        "@types/bun": "latest",
+        "typescript": "^5.0.0",
+      },
+    },
     "packages/cli": {
       "name": "@sarvasva-app",
       "devDependencies": {
         "@types/bun": "latest",
         "@types/prompts": "^2.4.9",
         "prompts": "^2.4.2",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
+      },
+    },
+    "packages/core": {
+      "name": "@repo/core",
+      "devDependencies": {
+        "@flyinghawk/sparse-clone": "^0.0.7",
+        "@types/bun": "latest",
+        "@types/commander": "^2.12.5",
+        "commander": "^14.0.0",
+        "zod": "^4.0.17",
+        "zx": "^8.8.0",
       },
       "peerDependencies": {
         "typescript": "^5",
@@ -117,6 +179,8 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.6", "", {}, "sha512-RBMg5FRL0I0gs51M/guSAj5/e14VQ4tpZnQNWwuDT66P14I43ItmPfIZRhO9fUVIPOAQXU47atlywZ/czoqFPA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.3.5", "", { "dependencies": { "@eslint/core": "^0.15.2", "levn": "^0.4.1" } }, "sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w=="],
+
+    "@flyinghawk/sparse-clone": ["@flyinghawk/sparse-clone@0.0.7", "", { "peerDependencies": { "typescript": "^5" } }, "sha512-xPr28zpZ+5JHDq5wtJUmitBAeFz+RffZWfPiqZjIcbEkJgC+zOgbKF9jHa/FxfdKjw1pP6AF3tXTttduy9kZRw=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 
@@ -196,6 +260,8 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
+    "@repo/core": ["@repo/core@workspace:packages/core"],
+
     "@repo/eslint-config": ["@repo/eslint-config@workspace:packages/eslint-config"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
@@ -204,9 +270,19 @@
 
     "@sarvasva-app": ["@sarvasva-app@workspace:packages/cli"],
 
+    "@sarvasva-app/next-app": ["@sarvasva-app/next-app@workspace:base/next/app-routes"],
+
+    "@sarvasva-app/next-pages": ["@sarvasva-app/next-pages@workspace:base/next/pages_routes"],
+
+    "@sarvasva-app/vite-react": ["@sarvasva-app/vite-react@workspace:base/vite/react-router"],
+
+    "@sarvasva-app/vite-tanstack": ["@sarvasva-app/vite-tanstack@workspace:base/vite/tanstack-router"],
+
     "@swc/helpers": ["@swc/helpers@0.5.15", "", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g=="],
 
     "@types/bun": ["@types/bun@1.2.20", "", { "dependencies": { "bun-types": "1.2.20" } }, "sha512-dX3RGzQ8+KgmMw7CsW4xT5ITBSCrSbfHc36SNT31EOUg/LA9JWq0VDdEXDRSe1InVWpd2yLUM1FUF/kEOyTzYA=="],
+
+    "@types/commander": ["@types/commander@2.12.5", "", { "dependencies": { "commander": "*" } }, "sha512-YXGZ/rz+s57VbzcvEV9fUoXeJlBt5HaKu5iUheiIWNsJs23bz6AnRuRiZBRVBLYyPnixNvVnuzM5pSaxr8Yp/g=="],
 
     "@types/estree": ["@types/estree@1.0.8", "", {}, "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="],
 
@@ -297,6 +373,8 @@
     "color-name": ["color-name@1.1.4", "", {}, "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA=="],
 
     "color-string": ["color-string@1.9.1", "", { "dependencies": { "color-name": "^1.0.0", "simple-swizzle": "^0.2.2" } }, "sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg=="],
+
+    "commander": ["commander@14.0.0", "", {}, "sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA=="],
 
     "concat-map": ["concat-map@0.0.1", "", {}, "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="],
 
@@ -715,6 +793,10 @@
     "word-wrap": ["word-wrap@1.2.5", "", {}, "sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA=="],
 
     "yocto-queue": ["yocto-queue@0.1.0", "", {}, "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q=="],
+
+    "zod": ["zod@4.0.17", "", {}, "sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ=="],
+
+    "zx": ["zx@8.8.0", "", { "bin": { "zx": "build/cli.js" } }, "sha512-v0VZXgSHusDvTtZROno3Ws8xkE1uNSSwH/yF8Fm+ZwBrYhr+bRNNpsnTJ32eR/t6umc7lAz5WqdP800ugW9zFA=="],
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
 

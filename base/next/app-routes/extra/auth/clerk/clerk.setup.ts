@@ -1,6 +1,6 @@
 import { middleware, signIn, signUp } from "./data";
 import path from "path";
-import { echo } from "@/utils";
+import { echo } from "@repo/core";
 
 const dependencies: string[] = ["@clerk/nextjs"];
 const devDependencies: string[] = [];

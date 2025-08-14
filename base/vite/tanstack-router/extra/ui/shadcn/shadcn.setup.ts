@@ -1,5 +1,5 @@
 import path from "path";
-import { echo } from "@/utils";
+import { echo } from "@repo/core";
 import { globalCss } from "./data";
 import type { SHADCN_THEME } from "@/types";
 

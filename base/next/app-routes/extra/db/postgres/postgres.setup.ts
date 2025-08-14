@@ -1,5 +1,5 @@
 import path from "path";
-import { echo } from "@/utils";
+import { echo } from "@repo/core";
 import { pool, route } from "./data";
 
 const dependencies: string[] = ["pg"];

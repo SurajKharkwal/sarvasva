@@ -1,7 +1,7 @@
 import path from "path";
-import { echo } from "@/utils";
+import { echo } from "@repo/core";
 import { prisma, route } from "./data";
-import type { SCRIPTS } from "@/types";
+import type { SCRIPTS } from "@repo/core";
 
 const dependencies: string[] = [
   "@prisma/client",

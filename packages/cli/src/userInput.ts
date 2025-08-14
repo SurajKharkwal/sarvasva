@@ -47,7 +47,7 @@ export const questions: PromptObject[] = [
     ],
   },
   {
-    type: "select",
+    type: (_, values) => (values.ui === "shadcn" ? "select" : null),
     name: "ui",
     message: "Choose a Theme:",
     choices: [

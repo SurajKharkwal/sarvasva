@@ -8,35 +8,25 @@ import { mongodbSetup } from "@/db/mongodb/mongodb.setup";
 import { standardSetup } from "@/eslint/standard/standard.setup";
 import { prismaSetup } from "@/orm/prisma/prisma.setup";
 import { drizzleSetup } from "@/orm/drizzle/drizzle.setup";
-import { echo, installPackages, runScripts } from "./utils";
-import { sparseClone } from "@flyinghawk/sparse-clone";
-import type { PM, SCRIPTS, SHADCN_THEME } from "@/types";
+import { echo, installPackages, runScripts } from "@repo/core";
+import { sparseClone } from "@repo/core";
+import type { SCRIPTS } from "@repo/core";
 import { layout } from "extra/common/layout";
 import path from "path";
+import type { OPTIONS } from "./utils";
 
-type OPTS = {
-  appName: string;
-  packageManager: PM;
-  ui?: "shadcn" | "hero";
-  auth?: "clerk";
-  database?: "mysql" | "postgres" | "sqlite" | "mongodb";
-  eslint?: "standard";
-  orm?: "prisma" | "drizzle";
-  shadcnTheme?: SHADCN_THEME;
-};
-
-let dep: string[] = [];
-let devDep: string[] = [];
+let dependencies: string[] = [];
+let devDependencies: string[] = [];
 let scripts: SCRIPTS[] = [];
 
-const addDeps = (result?: {
+const storeData = (result?: {
   dependencies?: string[];
   devDependencies?: string[];
   scripts?: SCRIPTS[];
 }) => {
   if (!result) return;
-  dep.push(...(result.dependencies ?? []));
-  devDep.push(...(result.devDependencies ?? []));
+  dependencies.push(...(result.dependencies ?? []));
+  devDependencies.push(...(result.devDependencies ?? []));
   scripts.push(...(result.scripts ?? []));
 };
 
@@ -53,46 +43,50 @@ const locate = {
   orm: { prisma: prismaSetup, drizzle: drizzleSetup },
 };
 
-export async function main(opts: OPTS) {
-  console.log(`Using package manager: ${opts.packageManager}`);
-
+export async function main(opts: OPTIONS) {
+  console.log("Loading ...");
+  const { appName, packageManager, auth, database, eslint, orm, theme, ui } =
+    opts;
   await sparseClone(
     "https://github.com/SurajKharkwal/sarvasva/",
     "base/next/app-routes/skeleton",
-    opts.appName,
-    { overrideDir: true },
+    appName,
+    { overrideDir: true, silent: true },
   );
-  if (opts.ui) {
-    if (opts.ui == "shadcn")
-      addDeps(
-        await locate.ui.shadcn(opts.appName, opts.shadcnTheme ?? "neutral"),
-      );
-    else addDeps(await locate.ui.hero(opts.appName));
+
+  if (ui === "shadcn") {
+    const res = await locate.ui.shadcn(appName, theme!);
+    storeData(res);
   }
-
-  if (opts.auth) addDeps(await locate.auth[opts.auth](opts.appName));
-
-  if (opts.database && opts.orm !== "prisma") {
-    addDeps(await locate.database[opts.database](opts.appName));
+  if (ui === "hero") {
+    const res = await locate.ui.hero(appName);
+    storeData(res);
   }
-
-  if (opts.eslint) addDeps(await locate.eslint[opts.eslint](opts.appName));
-
-  if (opts.orm && opts.database !== "mongodb") {
-    if (opts.orm === "prisma") {
-      addDeps(await locate.orm.prisma(opts.appName));
-    } else {
-      addDeps(await locate.orm.drizzle(opts.appName, opts.database ?? "mysql"));
-    }
+  if (auth) {
+    const res = await locate.auth[auth](appName);
+    storeData(res);
   }
-
-  await installPackages(opts.packageManager, opts.appName, dep, devDep);
-  await runScripts(opts.packageManager, opts.appName, scripts);
-  if (opts.ui == "hero" || opts.auth == "clerk")
-    await echo(
-      path.join(opts.appName, "src/app/layout.tsx"),
-      layout(opts.auth === "clerk", opts.ui === "hero"),
-    );
-
-  console.log("Project setup complete!");
+  if (database && orm !== "prisma") {
+    const res = await locate.database[database](appName);
+    storeData(res);
+  }
+  if (orm === "prisma") {
+    const res = await locate.orm.prisma(appName);
+    storeData(res);
+  }
+  if (orm === "drizzle") {
+    const res = await locate.orm.drizzle(appName, database as any);
+    storeData(res);
+  }
+  if (eslint) {
+    const res = await locate.eslint[eslint](appName);
+    storeData(res);
+  }
+  await echo(
+    path.join(appName, "src/layout.tsx"),
+    layout(auth === "clerk", ui === "hero"),
+  );
+  // console.log(dependencies, devDependencies, scripts);
+  await installPackages(packageManager, appName, dependencies, devDependencies);
+  await runScripts(packageManager, appName, scripts);
 }

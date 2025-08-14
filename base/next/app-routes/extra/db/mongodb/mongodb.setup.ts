@@ -1,4 +1,4 @@
-import { echo } from "@/utils";
+import { echo } from "@repo/core";
 import path from "path";
 import { db, route } from "./data";
 

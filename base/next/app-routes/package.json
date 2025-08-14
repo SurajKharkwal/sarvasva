@@ -1,11 +1,23 @@
 {
-  "name": "@sarvasva-cli/next-app",
-  "main": "./dist/index.js",
+  "name": "@sarvasva-app/next-app",
+  "version": "0.0.3",
+  "description": "A helper for @sarvasva-app",
   "type": "module",
-  "version": "0.0.0",
-  "description": "A helper for sarvasva cli",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "./dist/index.js"
+  ],
+  "bin": {
+    "@sarvasva-app/next-app": "./dist/index.js"
+  },
   "keywords": [
-    "sparse-clone"
+    "sparse-clone",
+    "cli",
+    "next.js",
+    "sarvasva"
   ],
   "repository": {
     "type": "git",
@@ -14,22 +26,16 @@
   "author": "Suraj Kharkwal",
   "license": "MIT",
   "scripts": {
-    "dev": "bun index.ts init",
-    "start": "bun ./dist/index.js",
+    "dev": "bun ./index.ts",
+    "test": "bun ./dist/index.js",
     "clean": "rm -rf ./dist/",
-    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node ",
+    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",
     "prerelease": "bun run clean && bun run build",
     "release": "bun publish --access public"
   },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
   "devDependencies": {
-    "@flyinghawk/sparse-clone": "^0.0.6",
+    "@repo/core": "*",
     "@types/bun": "latest",
-    "@types/validate-npm-package-name": "^4.0.2",
-    "commander": "^14.0.0",
-    "validate-npm-package-name": "^6.0.2",
-    "zx": "^8.8.0"
+    "typescript": "^5.0.0"
   }
 }

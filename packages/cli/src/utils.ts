@@ -1,5 +1,12 @@
 import { spawn } from "node:child_process";
 
+const pmExecMap: Record<string, string> = {
+  npm: "npx",
+  pnpm: "pnpm dlx",
+  bun: "bunx",
+  yarn: "yarn dlx",
+};
+
 export function generateCommand(data: Record<string, string>) {
   const {
     appName,
@@ -13,12 +20,11 @@ export function generateCommand(data: Record<string, string>) {
     router,
   } = data;
 
-  const command = packageManager || "npm";
+  const pmExec = pmExecMap[packageManager || "npm"] || "npx";
 
   const args: string[] = [];
 
   if (router) args.push(router);
-
   if (appName) args.push(`-n`, appName);
   if (ui) args.push(`-u`, ui);
   if (theme && ui === "shadcn") args.push(`-t`, theme);
@@ -28,8 +34,11 @@ export function generateCommand(data: Record<string, string>) {
   if (eslint) args.push(`-e`, eslint);
   if (packageManager) args.push(`-p`, packageManager);
 
-  console.log("Generated command:", command, args.join(" "));
-  return { command, args };
+  console.log("Generated command:", pmExec, args.join(" "));
+  return {
+    command: pmExec.split(" ")[0],
+    args: [...pmExec.split(" ").slice(1), ...args],
+  };
 }
 
 export function runCommand(command: string, args: string[]): Promise<void> {

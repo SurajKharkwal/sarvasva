@@ -1,0 +1,41 @@
+{
+  "name": "@sarvasva-app/next-pages",
+  "version": "0.0.1",
+  "description": "A helper for sarvasva cli",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "./dist/index.js"
+  ],
+  "bin": {
+    "@sarvasva-app/next-pages": "./dist/index.js"
+  },
+  "keywords": [
+    "sparse-clone",
+    "cli",
+    "next.js",
+    "sarvasva"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SurajKharkwal/sarvasva.git"
+  },
+  "author": "Suraj Kharkwal",
+  "license": "MIT",
+  "scripts": {
+    "dev": "bun index.ts",
+    "start": "bun ./dist/index.js",
+    "clean": "rm -rf ./dist/",
+    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",
+    "prerelease": "bun run clean && bun run build",
+    "release": "bun publish --access public"
+  },
+  "devDependencies": {
+    "@repo/core": "*",
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  }
+}

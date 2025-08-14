@@ -1,5 +1,5 @@
 export const route = `
-import { prisma } from "@/lib/db";
+import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 
 // GET all users
@@ -15,7 +15,7 @@ export async function GET() {
 `;
 
 export const prisma = `
-import { PrismaClient } from '../app/generated/prisma'
+import { PrismaClient } from '../generated/prisma'
 import { withAccelerate } from '@prisma/extension-accelerate'
 
 const globalForPrisma = global as unknown as { 

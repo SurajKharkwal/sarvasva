@@ -1,11 +1,21 @@
 {
   "name": "@sarvasva-app/vite-tanstack",
-  "main": "./dist/index.js",
-  "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A helper for sarvasva cli",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "bin": {
+    "@sarvasva-app/vite-tanstack": "./dist/index.js"
+  },
   "keywords": [
-    "sparse-clone"
+    "sparse-clone",
+    "cli",
+    "vite",
+    "tanstack",
+    "sarvasva"
   ],
   "repository": {
     "type": "git",
@@ -17,19 +27,13 @@
     "dev": "bun index.ts init",
     "start": "bun ./dist/index.js",
     "clean": "rm -rf ./dist/",
-    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node ",
+    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",
     "prerelease": "bun run clean && bun run build",
     "release": "bun publish --access public"
   },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
   "devDependencies": {
-    "@flyinghawk/sparse-clone": "^0.0.6",
+    "@repo/core": "*",
     "@types/bun": "latest",
-    "@types/validate-npm-package-name": "^4.0.2",
-    "commander": "^14.0.0",
-    "validate-npm-package-name": "^6.0.2",
-    "zx": "^8.8.0"
+    "typescript": "^5.0.0"
   }
 }

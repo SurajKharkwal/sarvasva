@@ -1,6 +1,6 @@
 import { heroSetup } from "@/ui/hero/hero.setup";
 import { shadcnSetup } from "@/ui/shadcn/shadcn.setup";
-import { installPackages, runScripts } from "./utils";
+import { installPackages, runScripts } from "@repo/core";
 import { sparseClone } from "@flyinghawk/sparse-clone";
 import type { PM, SCRIPTS, SHADCN_THEME } from "@/types";
 import { standardSetup } from "@/eslint/standard/standard.setup";

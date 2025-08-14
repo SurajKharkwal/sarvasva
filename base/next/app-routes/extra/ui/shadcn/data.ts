@@ -1,4 +1,4 @@
-import type { SHADCN_THEME } from "@/types";
+import type { SHADCN_THEME } from "@repo/core";
 
 const themes = {
   neutral: `
