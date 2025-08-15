@@ -1,50 +1,55 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { allowedOptions, validateInput } from "@/utils";
 import { main } from "@/main";
+import { ESLINT, PM, schema, THEME, UI } from "@/utils";
+import { z } from "@repo/core";
 
 const program = new Command();
 
 program
   .name("Sarvasva")
   .description("CLI tool to scaffold Sarvasva projects.")
-  .version("0.0.1");
-
-program
-  .command("init")
-  .description("Initialize a new project with your choices")
+  .version("0.0.1")
   .option("-n, --appName <appDir>", "provide a valid project name")
-  .option(
-    "-u, --ui <ui>",
-    `Choose UI framework (${allowedOptions.ui.join(", ")})`,
-    (val) => validateInput("ui", val),
-  )
+  .option("-u, --ui <ui>", `Choose UI framework (${UI.options.join(", ")})`)
   .option(
     "-t, --theme <theme>",
-    `Only if u chosed shadcn as ui. Choose Shadcn Theme (${allowedOptions.shadcnTheme.join(", ")})`,
-    (val) => validateInput("shadcnTheme", val),
+    `Choose Shadcn Theme (${THEME.options.join(", ")})`,
   )
   .option(
     "-e, --eslint <eslint>",
-    `Choose ESLint config (${allowedOptions.eslint.join(", ")})`,
-    (val) => validateInput("eslint", val),
+    `Choose ESLint config (${ESLINT.options.join(", ")})`,
   )
   .option(
     "-p, --package-manager <pm>",
-    `Choose Package Manager (${allowedOptions.pm.join(", ")})`,
-    (val) => validateInput("pm", val),
-    "npm",
+    `Choose Package Manager (${PM.options.join(", ")})`,
   )
   .addHelpText(
     "after",
     `
 Examples:
-  $ sarvasva-next-app-routes init --ui shadcn --auth clerk --database postgres --orm prisma --eslint airbnb --package-manager yarn
-  $ sarvasva-next-app-routes init --database sqlite --orm drizzle --eslint standard
+  $ @sarvasva-app/vite-tanstack -u shadcn -e standard -t neutral
+  $ @sarvasva-app/vite-tanstack --ui shadcn --eslint standard --package-manager bun --theme neutral
 `,
   )
   .action(async (options) => {
-    await main(options);
+    try {
+      await schema.parseAsync(options);
+      await main(options);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        console.error("❌ Validation Errors:");
+        err.issues.forEach((issue) => {
+          const path = issue.path.join(".");
+          console.error(
+            `  • Option "${path}" is invalid: ${issue.message} (Summary: ${issue.code})`,
+          );
+        });
+      } else {
+        console.error("⚠️ Unexpected error:", err);
+      }
+      process.exit(1);
+    }
   });
 
 program.parse(process.argv);

@@ -1,5 +1,8 @@
 # dependencies (bun install)
 node_modules
+next-app/
+vite-react/
+vite-tanstack/
 
 # output
 out

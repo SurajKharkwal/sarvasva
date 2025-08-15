@@ -1,4 +1,4 @@
-import type { SHADCN_THEME } from "@/types";
+import type { THEME } from "@/utils";
 
 const themes = {
   neutral: `
@@ -353,7 +353,7 @@ const themes = {
   `,
 };
 
-export const globalCss = (opts: SHADCN_THEME) => `
+export const globalCss = (opts: THEME) => `
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -410,7 +410,7 @@ export const globalCss = (opts: SHADCN_THEME) => `
 }
 `;
 
-export const components = (theme: SHADCN_THEME) => `
+export const components = (theme: THEME) => `
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "new-york",

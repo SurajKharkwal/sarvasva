@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Command } from "@repo/core";
+import { Command, z } from "@repo/core";
 import { AUTH, DATABASE, ESLINT, ORM, PM, schema, THEME, UI } from "@/utils";
 import { main } from "@/main";
 
@@ -36,8 +36,8 @@ program
     "after",
     `
 Examples:
-  $ @sarvasva-app/next-app -u shadcn -a clerk -d postgres -o prisma -e standard -p yarn
-  $ @sarvasva-app/next-app -d sqlite -o drizzle -e standard
+  $ @sarvasva-app/next-app -u shadcn -t neutral -a clerk -d postgres -o prisma -e standard -p yarn
+  $ @sarvasva-app/next-app --ui shadcn  --theme neurtal --auth clerk --package-manager bun --databse mysql  --orm prisma
 `,
   )
   .action(async (options) => {
@@ -45,7 +45,18 @@ Examples:
       await schema.parseAsync(options);
       await main(options);
     } catch (err) {
-      console.error(err);
+      if (err instanceof z.ZodError) {
+        console.error("❌ Validation Errors:");
+        err.issues.forEach((issue) => {
+          const path = issue.path.join(".");
+          console.error(
+            `  • Option "${path}" is invalid: ${issue.message} (Summary: ${issue.code})`,
+          );
+        });
+      } else {
+        console.error("⚠️ Unexpected error:", err);
+      }
+      process.exit(1);
     }
   });
 

@@ -19,16 +19,32 @@ export const schema = z
     orm: ORM.optional(),
     eslint: ESLINT.optional(),
   })
-  .refine(
-    (data) => {
-      // If ui is 'shadcn', theme may be present (or undefined); if not, theme must be undefined
-      if (data.theme === undefined && data.ui === "shadcn") return false;
-      // If database is 'mongodb', orm must be undefined; otherwise, orm may be present
-      if (data.orm !== undefined && data.database === "mongodb") return false;
-      return true;
-    },
-    { error: "Invalid conditional options" },
-  );
+  .superRefine((data, ctx) => {
+    if (data.ui === "hero" && data.theme) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Theme propertry is for shadcn only",
+        path: ["theme"],
+      });
+    }
+
+    // Theme is required for 'shadcn' UI
+    if (data.ui === "shadcn" && !data.theme) {
+      ctx.addIssue({
+        code: "custom",
+        message: 'Theme is required when UI is "shadcn"',
+        path: ["theme"],
+      });
+    }
+
+    if (data.database === "mongodb" && data.orm) {
+      ctx.addIssue({
+        code: "custom", // use string directly
+        message: 'ORM cannot be used with "mongodb"',
+        path: ["orm"],
+      });
+    }
+  });
 
 export type OPTIONS = z.infer<typeof schema>;
 

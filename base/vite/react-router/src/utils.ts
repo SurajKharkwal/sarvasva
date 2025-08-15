@@ -13,14 +13,24 @@ export const schema = z
     theme: THEME.optional(),
     eslint: ESLINT.optional(),
   })
-  .refine(
-    (data) => {
-      // If ui is 'shadcn', theme may be present (or undefined); if not, theme must be undefined
-      if (data.theme === undefined && data.ui === "shadcn") return false;
-      return true;
-    },
-    { error: "Invalid conditional options" },
-  );
+  .superRefine((data, ctx) => {
+    if (data.ui === "hero" && data.theme) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Theme propertry is for shadcn only",
+        path: ["theme"],
+      });
+    }
+
+    // Theme is required for 'shadcn' UI
+    if (data.ui === "shadcn" && !data.theme) {
+      ctx.addIssue({
+        code: "custom",
+        message: 'Theme is required when UI is "shadcn"',
+        path: ["theme"],
+      });
+    }
+  });
 
 export type OPTIONS = z.infer<typeof schema>;
 export type THEME = z.infer<typeof THEME>;

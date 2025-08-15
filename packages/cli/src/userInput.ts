@@ -19,8 +19,8 @@ export const questions: PromptObject[] = [
     name: "router",
     message: "Select the router type for Next.js:",
     choices: [
-      { title: "App Router", value: "@sarvasva-app/next-app" },
-      { title: "Page Router", value: "@sarvasva-app/next-pages" },
+      { title: "App Router", value: "next-app" },
+      { title: "Page Router", value: "next-pages" },
     ],
   },
 
@@ -30,8 +30,8 @@ export const questions: PromptObject[] = [
     name: "router",
     message: "Select a router for React:",
     choices: [
-      { title: "React Router", value: "@sarvasva-app/vite-react" },
-      { title: "TanStack Router", value: "@sarvasva-app/vite-tanstack" },
+      { title: "React Router", value: "react-router" },
+      { title: "TanStack Router", value: "tanstack-router" },
     ],
   },
 
@@ -48,7 +48,7 @@ export const questions: PromptObject[] = [
   },
   {
     type: (_, values) => (values.ui === "shadcn" ? "select" : null),
-    name: "ui",
+    name: "theme",
     message: "Choose a Theme:",
     choices: [
       { title: "Neutral", value: "neutral" },
@@ -86,7 +86,10 @@ export const questions: PromptObject[] = [
 
   // Next.js: ORM selection
   {
-    type: (_, values) => (values.framework === "next" ? "select" : null),
+    type: (_, values) =>
+      values.framework === "next" && values.database !== "mongodb"
+        ? "select"
+        : null,
     name: "orm",
     message: "Select an ORM for Next.js projects:",
     choices: [

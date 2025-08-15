@@ -1,13 +1,36 @@
 import { spawn } from "node:child_process";
 
-const pmExecMap: Record<string, string> = {
-  npm: "npx",
-  pnpm: "pnpm dlx",
-  bun: "bunx",
-  yarn: "yarn dlx",
+// Define allowed package managers
+type PackageManager = "bun" | "npm" | "yarn" | "pnpm";
+
+// Define the input object type for generateCommand
+interface GenerateCommandData {
+  appName: string;
+  ui?: string;
+  theme?: string;
+  auth?: string;
+  database?: string;
+  orm?: string;
+  eslint?: string;
+  packageManager: PackageManager;
+  router: string;
+}
+
+const prefix = (name: string, pm: PackageManager): [string, ...string[]] => {
+  const map: Record<PackageManager, [string, ...string[]]> = {
+    bun: ["bunx", "--bun", `@sarvasva-app/${name}`],
+    npm: ["npx", `@sarvasva-app/${name}`],
+    yarn: ["yarn", "dlx", `@sarvasva-app/${name}`],
+    pnpm: ["pnpm", "dlx", `@sarvasva-app/${name}`],
+  };
+  return map[pm] ?? ["bunx", "--bun", `@sarvasva-app/${name}`];
 };
 
-export function generateCommand(data: Record<string, string>) {
+// Generates command + arguments
+export function generateCommand(data: GenerateCommandData): {
+  cmd: string;
+  args: string[];
+} {
   const {
     appName,
     ui,
@@ -20,34 +43,28 @@ export function generateCommand(data: Record<string, string>) {
     router,
   } = data;
 
-  const pmExec = pmExecMap[packageManager || "npm"] || "npx";
+  const [cmd, ...baseArgs]: string[] = prefix(router, packageManager);
 
-  const args: string[] = [];
+  const args: string[] = [...baseArgs, "-n", appName, "-p", packageManager];
 
-  if (router) args.push(router);
-  if (appName) args.push(`-n`, appName);
-  if (ui) args.push(`-u`, ui);
-  if (theme && ui === "shadcn") args.push(`-t`, theme);
-  if (auth) args.push(`-a`, auth);
-  if (database) args.push(`-d`, database);
-  if (orm) args.push(`-o`, orm);
-  if (eslint) args.push(`-e`, eslint);
-  if (packageManager) args.push(`-p`, packageManager);
+  if (ui && ui !== "none") args.push("-u", ui);
+  if (auth && auth !== "none") args.push("-a", auth);
+  if (orm && orm !== "none") args.push("-o", orm);
+  if (theme && theme !== "none") args.push("-t", theme);
+  if (eslint && eslint !== "none") args.push("-e", eslint);
+  if (database && database !== "none") args.push("-d", database);
 
-  console.log("Generated command:", pmExec, args.join(" "));
-  return {
-    command: pmExec.split(" ")[0],
-    args: [...pmExec.split(" ").slice(1), ...args],
-  };
+  return { cmd, args };
 }
 
-export function runCommand(command: string, args: string[]): Promise<void> {
+// Runs the given command
+export function runCommand(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const proc = spawn(command, args, { stdio: "inherit" });
-    proc.on("close", (code) =>
+    const proc = spawn(cmd, args, { stdio: "inherit" });
+    proc.on("close", (code: number | null) =>
       code === 0
         ? resolve()
-        : reject(new Error(`${command} exited with code ${code}`)),
+        : reject(new Error(`${cmd} exited with code ${code}`)),
     );
     proc.on("error", reject);
   });

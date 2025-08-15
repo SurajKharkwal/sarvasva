@@ -1,30 +1,22 @@
 import { heroSetup } from "@/ui/hero/hero.setup";
 import { shadcnSetup } from "@/ui/shadcn/shadcn.setup";
-import { installPackages, runScripts } from "@repo/core";
-import { sparseClone } from "@flyinghawk/sparse-clone";
-import type { PM, SCRIPTS, SHADCN_THEME } from "@/types";
+import { installPackages, runScripts, sparseClone } from "@repo/core";
+import type { SCRIPTS } from "@/types";
 import { standardSetup } from "@/eslint/standard/standard.setup";
+import type { OPTIONS } from "./utils";
 
-type OPTS = {
-  appName: string;
-  packageManager: PM;
-  ui?: "shadcn" | "hero";
-  eslint?: "standard";
-  shadcnTheme?: SHADCN_THEME;
-};
-
-let dep: string[] = [];
-let devDep: string[] = [];
+let dependencies: string[] = [];
+let devDependencies: string[] = [];
 let scripts: SCRIPTS[] = [];
 
-const addDeps = (result?: {
+const storeData = (result?: {
   dependencies?: string[];
   devDependencies?: string[];
   scripts?: SCRIPTS[];
 }) => {
   if (!result) return;
-  dep.push(...(result.dependencies ?? []));
-  devDep.push(...(result.devDependencies ?? []));
+  dependencies.push(...(result.dependencies ?? []));
+  devDependencies.push(...(result.devDependencies ?? []));
   scripts.push(...(result.scripts ?? []));
 };
 
@@ -33,27 +25,28 @@ const locate = {
   eslint: { standard: standardSetup },
 };
 
-export async function main(opts: OPTS) {
-  console.log(`Using package manager: ${opts.packageManager}`);
-
+export async function main(opts: OPTIONS) {
+  const { appName, packageManager, eslint, theme, ui } = opts;
   await sparseClone(
     "https://github.com/SurajKharkwal/sarvasva/",
-    "base/vite/react-router/skeleton",
-    opts.appName,
-    { overrideDir: true },
+    "base/vite/tanstack-router/skeleton",
+    appName,
+    { silent: true, overrideDir: true },
   );
-
-  if (opts.ui) {
-    if (opts.ui == "shadcn")
-      addDeps(
-        await locate.ui.shadcn(opts.appName, opts.shadcnTheme ?? "neutral"),
-      );
-    else addDeps(await locate.ui.hero(opts.appName));
+  if (ui === "shadcn") {
+    const res = await locate.ui.shadcn(appName, theme!);
+    storeData(res);
+  }
+  if (ui === "hero") {
+    const res = await locate.ui.hero(appName);
+    storeData(res);
+  }
+  if (eslint === "standard") {
+    const res = await locate.eslint[eslint](appName);
+    storeData(res);
   }
 
-  if (opts.eslint) addDeps(await locate.eslint[opts.eslint](opts.appName));
-
-  await installPackages(opts.packageManager, opts.appName, dep, devDep);
-  await runScripts(opts.packageManager, opts.appName, scripts);
+  await installPackages(packageManager, appName, dependencies, devDependencies);
+  await runScripts(packageManager, appName, scripts);
   console.log("Project setup complete!");
 }

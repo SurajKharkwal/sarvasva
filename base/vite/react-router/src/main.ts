@@ -1,7 +1,6 @@
 import { heroSetup } from "@/ui/hero/hero.setup";
 import { shadcnSetup } from "@/ui/shadcn/shadcn.setup";
-import { installPackages, runScripts } from "@repo/core";
-import { sparseClone } from "@flyinghawk/sparse-clone";
+import { installPackages, runScripts, sparseClone } from "@repo/core";
 import type { SCRIPTS } from "@/types";
 import { standardSetup } from "@/eslint/standard/standard.setup";
 import type { OPTIONS } from "./utils";
@@ -27,13 +26,13 @@ const locate = {
 };
 
 export async function main(opts: OPTIONS) {
+  const { appName, packageManager, eslint, theme, ui } = opts;
   await sparseClone(
     "https://github.com/SurajKharkwal/sarvasva/",
     "base/vite/react-router/skeleton",
-    opts.appName,
-    { overrideDir: true },
+    appName,
+    { silent: true, overrideDir: true },
   );
-  const { appName, packageManager, eslint, theme, ui } = opts;
   if (ui === "shadcn") {
     const res = await locate.ui.shadcn(appName, theme!);
     storeData(res);

@@ -1,6 +1,6 @@
 {
-  "name": "@sarvasva-app/vite-react",
-  "version": "0.0.1",
+  "name": "@sarvasva-app/react-router",
+  "version": "0.0.2",
   "description": "A helper for sarvasva cli",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,6 +10,9 @@
   "bin": {
     "@sarvasva-app/vite-react": "./dist/index.js"
   },
+  "files": [
+    "./dist/index.js"
+  ],
   "keywords": [
     "sparse-clone",
     "cli",
@@ -28,7 +31,7 @@
     "start": "bun ./dist/index.js",
     "clean": "rm -rf ./dist/",
     "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",
-    "prerelease": "bun run clean && bun run build",
+    "prerelease": "bun run build",
     "release": "bun publish --access public"
   },
   "devDependencies": {

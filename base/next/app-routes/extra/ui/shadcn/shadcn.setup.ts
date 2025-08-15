@@ -9,7 +9,7 @@ const dependencies: string[] = [
   "lucide-react",
   "tailwind-merge",
 ];
-const devDependencies: string[] = ["tailwind-merge"];
+const devDependencies: string[] = ["tailwind-merge", "tw-animate-css"];
 
 export async function shadcnSetup(appDir: string, theme: SHADCN_THEME) {
   try {

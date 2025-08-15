@@ -1,13 +1,43 @@
 {
-  "name": "@sarvasva-app",
-  "module": "index.ts",
+  "name": "@sarvasva-app/init",
+  "version": "0.0.9",
+  "description": "A all in one cli tool to generate the starter kit",
   "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "./dist/index.js"
+  ],
+  "bin": {
+    "@sarvasva-app/init": "./dist/index.js"
+  },
+  "keywords": [
+    "sparse-clone",
+    "cli",
+    "vite",
+    "react",
+    "sarvasva"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SurajKharkwal/sarvasva.git"
+  },
+  "author": "Suraj Kharkwal",
+  "license": "MIT",
+  "scripts": {
+    "dev": "bun index.ts",
+    "start": "bun ./dist/index.js",
+    "clean": "rm -rf ./dist/ ./next-app ./next-pages ./test/ ./react-router ./tanstack-router",
+    "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",
+    "prerelease": "bun run build",
+    "release": "bun publish --access public"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/prompts": "^2.4.9",
+    "ora": "^8.2.0",
     "prompts": "^2.4.2"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
   }
 }

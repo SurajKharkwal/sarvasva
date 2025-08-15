@@ -9,12 +9,16 @@ const dependencies: string[] = [
   "lucide-react",
   "tailwind-merge",
 ];
-const devDependencies: string[] = ["tailwind-merge"];
+const devDependencies: string[] = ["tailwind-merge", "tw-animate-css"];
 
 export async function shadcnSetup(appDir: string, theme: THEME) {
   try {
     await echo(path.join(appDir, "components.json"), components(theme));
-    await echo(path.join(appDir, "styles/gloabls.css"), globalCss(theme), true);
+    await echo(
+      path.join(appDir, "src/styles/globals.css"),
+      globalCss(theme),
+      true,
+    );
     return { dependencies, devDependencies };
   } catch (err) {
     console.error(err);

@@ -44,7 +44,6 @@ const locate = {
 };
 
 export async function main(opts: OPTIONS) {
-  console.log("Loading ...");
   const { appName, packageManager, auth, database, eslint, orm, theme, ui } =
     opts;
   await sparseClone(

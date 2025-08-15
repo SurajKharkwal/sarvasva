@@ -1,6 +1,6 @@
 {
-  "name": "@sarvasva-app/vite-tanstack",
-  "version": "0.0.1",
+  "name": "@sarvasva-app/tanstack-router",
+  "version": "0.0.2",
   "description": "A helper for sarvasva cli",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,6 +10,9 @@
   "bin": {
     "@sarvasva-app/vite-tanstack": "./dist/index.js"
   },
+  "files": [
+    "./dist/index.js"
+  ],
   "keywords": [
     "sparse-clone",
     "cli",
@@ -24,11 +27,11 @@
   "author": "Suraj Kharkwal",
   "license": "MIT",
   "scripts": {
-    "dev": "bun index.ts init",
+    "dev": "bun index.ts",
     "start": "bun ./dist/index.js",
     "clean": "rm -rf ./dist/",
     "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",
-    "prerelease": "bun run clean && bun run build",
+    "prerelease": "bun run build",
     "release": "bun publish --access public"
   },
   "devDependencies": {

@@ -34,6 +34,8 @@ import "@/styles/globals.css";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
+import { Provider } from "@/components/provider";
+
 // Create a new router instance
 const router = createRouter({ routeTree });
 

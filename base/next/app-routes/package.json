@@ -1,6 +1,6 @@
 {
   "name": "@sarvasva-app/next-app",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A helper for @sarvasva-app",
   "type": "module",
   "main": "./dist/index.js",

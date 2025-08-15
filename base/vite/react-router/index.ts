@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { main } from "@/main";
 import { ESLINT, PM, schema, THEME, UI } from "@/utils";
+import { z } from "@repo/core";
 
 const program = new Command();
 
@@ -27,8 +28,8 @@ program
     "after",
     `
 Examples:
-  $ sarvasva-next-app-routes init --ui shadcn --auth clerk --database postgres --orm prisma --eslint airbnb --package-manager yarn
-  $ sarvasva-next-app-routes init --database sqlite --orm drizzle --eslint standard
+  $ @sarvasva-app/vite-react -u shadcn -e standard -t neutral
+  $ @sarvasva-app/vite-react --ui shadcn --eslint standard --package-manager bun --theme neutral
 `,
   )
   .action(async (options) => {
@@ -36,7 +37,18 @@ Examples:
       await schema.parseAsync(options);
       await main(options);
     } catch (err) {
-      console.log(err);
+      if (err instanceof z.ZodError) {
+        console.error("❌ Validation Errors:");
+        err.issues.forEach((issue) => {
+          const path = issue.path.join(".");
+          console.error(
+            `  • Option "${path}" is invalid: ${issue.message} (Summary: ${issue.code})`,
+          );
+        });
+      } else {
+        console.error("⚠️ Unexpected error:", err);
+      }
+      process.exit(1);
     }
   });
 
