@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     ${CLERK_PROVIDER_START}
        ${HEROUI_START}
-          <Component {...pageProps} />;
+          <Component {...pageProps} />
        ${HEROUI_END}
     ${CLERK_PROVIDER_END}
   );

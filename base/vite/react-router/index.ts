@@ -1,39 +1,27 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { allowedOptions, validateInput } from "@/utils";
 import { main } from "@/main";
+import { ESLINT, PM, schema, THEME, UI } from "@/utils";
 
 const program = new Command();
 
 program
   .name("Sarvasva")
   .description("CLI tool to scaffold Sarvasva projects.")
-  .version("0.0.1");
-
-program
-  .command("init")
-  .description("Initialize a new project with your choices")
+  .version("0.0.1")
   .option("-n, --appName <appDir>", "provide a valid project name")
-  .option(
-    "-u, --ui <ui>",
-    `Choose UI framework (${allowedOptions.ui.join(", ")})`,
-    (val) => validateInput("ui", val),
-  )
+  .option("-u, --ui <ui>", `Choose UI framework (${UI.options.join(", ")})`)
   .option(
     "-t, --theme <theme>",
-    `Only if u chosed shadcn as ui. Choose Shadcn Theme (${allowedOptions.shadcnTheme.join(", ")})`,
-    (val) => validateInput("shadcnTheme", val),
+    `Choose Shadcn Theme (${THEME.options.join(", ")})`,
   )
   .option(
     "-e, --eslint <eslint>",
-    `Choose ESLint config (${allowedOptions.eslint.join(", ")})`,
-    (val) => validateInput("eslint", val),
+    `Choose ESLint config (${ESLINT.options.join(", ")})`,
   )
   .option(
     "-p, --package-manager <pm>",
-    `Choose Package Manager (${allowedOptions.pm.join(", ")})`,
-    (val) => validateInput("pm", val),
-    "npm",
+    `Choose Package Manager (${PM.options.join(", ")})`,
   )
   .addHelpText(
     "after",
@@ -44,7 +32,12 @@ Examples:
 `,
   )
   .action(async (options) => {
-    await main(options);
+    try {
+      await schema.parseAsync(options);
+      await main(options);
+    } catch (err) {
+      console.log(err);
+    }
   });
 
 program.parse(process.argv);

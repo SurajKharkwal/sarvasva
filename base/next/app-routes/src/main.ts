@@ -35,7 +35,7 @@ const locate = {
   auth: { clerk: clerkSetup },
   database: {
     mysql: mysqlSetup,
-    postgres: postgresSetup,
+    postgresql: postgresSetup,
     sqlite: sqliteSetup,
     mongodb: mongodbSetup,
   },
@@ -70,12 +70,8 @@ export async function main(opts: OPTIONS) {
     const res = await locate.database[database](appName);
     storeData(res);
   }
-  if (orm === "prisma") {
-    const res = await locate.orm.prisma(appName);
-    storeData(res);
-  }
-  if (orm === "drizzle") {
-    const res = await locate.orm.drizzle(appName, database as any);
+  if (orm) {
+    const res = await locate.orm[orm](appName, database as any);
     storeData(res);
   }
   if (eslint) {

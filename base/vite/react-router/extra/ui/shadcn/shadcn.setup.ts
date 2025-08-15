@@ -1,7 +1,7 @@
 import path from "path";
 import { echo } from "@repo/core";
-import { globalCss } from "./data";
-import type { SHADCN_THEME } from "@/types";
+import { components, globalCss } from "./data";
+import type { THEME } from "@/utils";
 
 const dependencies: string[] = [
   "class-variance-authority",
@@ -11,9 +11,10 @@ const dependencies: string[] = [
 ];
 const devDependencies: string[] = ["tailwind-merge"];
 
-export async function shadcnSetup(appDir: string, theme: SHADCN_THEME) {
+export async function shadcnSetup(appDir: string, theme: THEME) {
   try {
-    await echo(path.join(appDir, "components.json"), globalCss(theme));
+    await echo(path.join(appDir, "components.json"), components(theme));
+    await echo(path.join(appDir, "styles/gloabls.css"), globalCss(theme), true);
     return { dependencies, devDependencies };
   } catch (err) {
     console.error(err);

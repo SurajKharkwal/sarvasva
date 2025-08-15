@@ -27,7 +27,7 @@ export async function clerkSetup(appDir: string) {
     );
 
     await echo(
-      path.join(appDir, "src/globals.css"),
+      path.join(appDir, "src/styles/globals.css"),
       "@layer theme, base, clerk, components, utilities;",
       true,
     );

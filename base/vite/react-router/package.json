@@ -24,7 +24,7 @@
   "author": "Suraj Kharkwal",
   "license": "MIT",
   "scripts": {
-    "dev": "bun index.ts init",
+    "dev": "bun index.ts",
     "start": "bun ./dist/index.js",
     "clean": "rm -rf ./dist/",
     "build": "bun run clean && bun build index.ts --outdir dist --minify --bundle --target=node --banner.node=\"#!/usr/bin/env node\"",

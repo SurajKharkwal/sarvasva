@@ -35,7 +35,7 @@ const locate = {
   auth: { clerk: clerkSetup },
   database: {
     mysql: mysqlSetup,
-    postgres: postgresSetup,
+    postgresql: postgresSetup,
     sqlite: sqliteSetup,
     mongodb: mongodbSetup,
   },
@@ -49,7 +49,7 @@ export async function main(opts: OPTIONS) {
     opts;
   await sparseClone(
     "https://github.com/SurajKharkwal/sarvasva/",
-    "base/next/next-pages/skeleton",
+    "base/next/pages-routes/skeleton",
     appName,
     { overrideDir: true, silent: true },
   );
@@ -70,22 +70,19 @@ export async function main(opts: OPTIONS) {
     const res = await locate.database[database](appName);
     storeData(res);
   }
-  if (orm === "prisma") {
-    const res = await locate.orm.prisma(appName);
-    storeData(res);
-  }
-  if (orm === "drizzle") {
-    const res = await locate.orm.drizzle(appName, database as any);
+  if (orm) {
+    const res = await locate.orm[orm](appName, database as any);
     storeData(res);
   }
   if (eslint) {
     const res = await locate.eslint[eslint](appName);
     storeData(res);
   }
-  await echo(
-    path.join(appName, "src/layout.tsx"),
-    appLayout(auth === "clerk", ui === "hero"),
-  );
+  if (auth === "clerk" && ui === "hero")
+    await echo(
+      path.join(appName, "src/pages/_app.tsx"),
+      appLayout(auth === "clerk", ui === "hero"),
+    );
   // console.log(dependencies, devDependencies, scripts);
   await installPackages(packageManager, appName, dependencies, devDependencies);
   await runScripts(packageManager, appName, scripts);

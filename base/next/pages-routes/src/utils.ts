@@ -3,7 +3,7 @@ import { z } from "@repo/core";
 export const UI = z.enum(["shadcn", "hero"]);
 export const THEME = z.enum(["neutral", "gray", "slate", "zinc"]);
 export const AUTH = z.enum(["clerk"]);
-export const DATABASE = z.enum(["mysql", "postgres", "sqlite", "mongodb"]);
+export const DATABASE = z.enum(["mysql", "postgresql", "sqlite", "mongodb"]);
 export const ORM = z.enum(["prisma", "drizzle"]);
 export const ESLINT = z.enum(["standard"]);
 export const PM = z.enum(["bun", "npm", "pnpm", "yarn"]);
@@ -31,3 +31,5 @@ export const schema = z
   );
 
 export type OPTIONS = z.infer<typeof schema>;
+
+export type ORM_DB = Exclude<z.infer<typeof DATABASE>, "mongodb">;
